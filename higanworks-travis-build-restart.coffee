@@ -37,7 +37,7 @@ module.exports = (robot) ->
             .header("Authorization", "token #{process.env.HUBOT_TRAVIS_ACCESS_TOKEN}")
             .post() (err, res, body) ->
               json = JSON.parse body
-              msg.send "HiganBot get result: #{json.result} notice: #{json.flash[0].notice}"
+              msg.send "HiganBot get result: <span class='label label-success'>#{json.result}</span> : #{json.flash[0].notice}"
         else
           msg.send "HiganBot can not find #{repo}"
 
