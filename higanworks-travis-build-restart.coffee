@@ -41,7 +41,6 @@ module.exports = (robot) ->
             .post() (err, res, body) ->
               json = JSON.parse body
               message = "HiganBot get result: <span class='label label-success'>#{json.result}</span> : #{json.flash[0].notice}"
-              msg.send message
               post_data = QS.stringify source: message
               msg.http(process.env.HUBOT_IDOBATA_HOOK_URL)
                 .query(format: "html")
