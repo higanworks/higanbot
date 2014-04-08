@@ -6,6 +6,7 @@
 # 
 # Configuration:
 #   HUBOT_TRAVIS_ACCESS_TOKEN
+#   HUBOT_IDOBATA_HOOK_URL
 #   HUBOT_GITHUB_TOKEN
 #   HUBOT_GITHUB_USER
 #   HUBOT_GITHUB_API
@@ -18,6 +19,8 @@
 #
 # Author:
 #   MATSUMOTO, Ryosuke
+
+QS = require "querystring"
 
 module.exports = (robot) ->
 
@@ -37,7 +40,14 @@ module.exports = (robot) ->
             .header("Authorization", "token #{process.env.HUBOT_TRAVIS_ACCESS_TOKEN}")
             .post() (err, res, body) ->
               json = JSON.parse body
-              msg.send "HiganBot get result: <span class='label label-success'>#{json.result}</span> : #{json.flash[0].notice}"
+              message = "HiganBot get result: <span class='label label-success'>#{json.result}</span> : #{json.flash[0].notice}"
+              msg.send message
+              post_data = QS.stringify source: message
+              msg.http(process.env.HUBOT_IDOBATA_HOOK_URL)
+                .query(format: "html")
+                .header("Content-Type", "application/x-www-form-urlencoded")
+                .post(post_data) (err, res, body) ->
+                  data = body
         else
           msg.send "HiganBot can not find #{repo}"
 
