@@ -40,7 +40,8 @@ module.exports = (robot) ->
             .header("Authorization", "token #{process.env.HUBOT_TRAVIS_ACCESS_TOKEN}")
             .post() (err, res, body) ->
               json = JSON.parse body
-              message = "HiganBot get result: <span class='label label-success'>#{json.result}</span> : #{json.flash[0].notice}"
+              result = if json.result then "<span class='label label-success'>Success</span>" else "<span class='label label-important'>Failure</span>"
+              message = "HiganBot get result: #{result} : #{json.flash[0].notice}"
               post_data = QS.stringify source: message
               msg.http(process.env.HUBOT_IDOBATA_HOOK_URL)
                 .query(format: "html")
