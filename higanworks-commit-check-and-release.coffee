@@ -63,7 +63,6 @@ module.exports = (robot) ->
                           msg.send "HiganBot get result: #{json.result} notice: #{json.flash[0].notice}"
                     else
                       msg.send "HiganBot can not find #{repo}"
-                msg.send "@HiganBot travis build restart #{restart_repo}"
               else
                 msg.send "HiganBot not found #{check_repo} newest commit.\n  brain stored commit: #{robot.brain.data[key]}\n  current repo commit: #{c.sha}"
             robot.brain.save()
