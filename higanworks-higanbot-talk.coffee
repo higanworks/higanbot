@@ -47,3 +47,6 @@ module.exports = (robot) ->
   robot.hear /^うん$/i, (msg) ->
     msg.send "なるほど！"
 
+  robot.hear /ありがとう/i, (msg) ->
+    msg.send "どういたしまして！"
+
