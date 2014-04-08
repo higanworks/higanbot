@@ -24,6 +24,9 @@ QS = require "querystring"
 
 module.exports = (robot) ->
 
+  success = "<span class='label label-success'>Success</span>"
+  failure = "<span class='label label-important'>Failure</span>"
+
   github = require("githubot")(robot)
   robot.respond /travis build restart (.*)$/i, (msg) ->
     repo = github.qualified_repo msg.match[1]
@@ -40,8 +43,8 @@ module.exports = (robot) ->
             .header("Authorization", "token #{process.env.HUBOT_TRAVIS_ACCESS_TOKEN}")
             .post() (err, res, body) ->
               json = JSON.parse body
-              result = if json.result then "<span class='label label-success'>Success</span>" else "<span class='label label-important'>Failure</span>"
-              message = "HiganBot get result: #{result} : #{json.flash[0].notice}"
+              result = if json.result then success else failure
+              message = "#{repo} build restart. result: #{result} : #{json.flash[0].notice}"
               post_data = QS.stringify source: message
               msg.http(process.env.HUBOT_IDOBATA_HOOK_URL)
                 .query(format: "html")
