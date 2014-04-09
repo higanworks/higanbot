@@ -19,7 +19,12 @@
 # Author:
 #   MATSUMOTO, Ryosuke
 
+QS = require "querystring"
+
 module.exports = (robot) ->
+
+  success = "<span class='label label-success'>Success</span>"
+  failure = "<span class='label label-important'>Failure</span>"
 
   github = require("githubot")(robot)
   robot.respond /travis release (.*) if commit (.*)$/i, (msg) ->
@@ -43,6 +48,8 @@ module.exports = (robot) ->
               robot.brain.data[key] = c.sha
               msg.send "#{key} is not found. Insert newest commit hash:#{c.sha} into brain.data[#{key}]"
             else
+              # test
+              #if robot.brain.data[key] == c.sha
               if robot.brain.data[key] != c.sha
                 robot.brain.data[key] = c.sha
                 msg.send "found #{check_repo} newest commit, connect travis and latest build restart for relase."
@@ -60,7 +67,14 @@ module.exports = (robot) ->
                         .header("Authorization", "token #{process.env.HUBOT_TRAVIS_ACCESS_TOKEN}")
                         .post() (err, res, body) ->
                           json = JSON.parse body
-                          msg.send "HiganBot get result: #{json.result} notice: #{json.flash[0].notice}"
+                          result = if json.result then success else failure
+                          message = "#{repo} build restart. result: #{result} : #{json.flash[0].notice}"
+                          post_data = QS.stringify source: message
+                          msg.http(process.env.HUBOT_IDOBATA_HOOK_URL)
+                            .query(format: "html")
+                            .header("Content-Type", "application/x-www-form-urlencoded")
+                            .post(post_data) (err, res, body) ->
+                              data = body
                     else
                       msg.send "HiganBot can not find #{repo}"
               else
