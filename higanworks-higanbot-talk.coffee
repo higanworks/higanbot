@@ -21,7 +21,8 @@ module.exports = (robot) ->
     msg.send "なに？"
 
   robot.hear /よ$/i, (msg) ->
-    msg.send "そうだね！"
+    words = ["そうだね！", "はい？", "それは違うんじゃないかな"]
+    msg.send msg.random words
 
   robot.hear /よね$/i, (msg) ->
     msg.send "そうかな？"
