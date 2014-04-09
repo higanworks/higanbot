@@ -42,15 +42,22 @@ module.exports = (robot) ->
           msg.http("https://api.travis-ci.org/builds/#{json[0].id}/restart")
             .header("Authorization", "token #{process.env.HUBOT_TRAVIS_ACCESS_TOKEN}")
             .post() (err, res, body) ->
-              json = JSON.parse body
-              result = if json.result then success else failure
-              message = "#{repo} build restart. result: #{result} : #{json.flash[0].notice}"
-              post_data = QS.stringify source: message
-              msg.http(process.env.HUBOT_IDOBATA_HOOK_URL)
-                .query(format: "html")
-                .header("Content-Type", "application/x-www-form-urlencoded")
-                .post(post_data) (err, res, body) ->
-                  data = body
+              if res.statusCode == 200
+                json = JSON.parse body
+                result = if json.result then success else failure
+                if json.flash[0].error
+                  message = "#{repo} build restart. result: #{failure} : #{json.flash[0].error}"
+                else
+                  message = "#{repo} build restart. result: #{result} : #{json.flash[0].notice}"
+                post_data = QS.stringify source: message
+                msg.http(process.env.HUBOT_IDOBATA_HOOK_URL)
+                  .query(format: "html")
+                  .header("Content-Type", "application/x-www-form-urlencoded")
+                  .post(post_data) (err, res, body) ->
+                    data = body
+              else
+                msg.send "Travis API return error. status:#{res.statusCode} body:#{body}"
+                
         else
           msg.send "HiganBot can not find #{repo}"
 
