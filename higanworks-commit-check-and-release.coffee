@@ -52,7 +52,7 @@ module.exports = (robot) ->
               #if robot.brain.data[key] == c.sha
               if robot.brain.data[key] != c.sha
                 robot.brain.data[key] = c.sha
-                msg.send "found #{check_repo} newest commit, connect travis and latest build restart for relase."
+                msg.send "found #{check_repo} newest commit #{c.sha}, connect travis and latest build restart for release."
           
                 # restart latest build for release
                 travis_url = "https://api.travis-ci.org/repositories/#{restart_repo}/builds.json"
@@ -66,9 +66,10 @@ module.exports = (robot) ->
                       msg.http("https://api.travis-ci.org/builds/#{json[0].id}/restart")
                         .header("Authorization", "token #{process.env.HUBOT_TRAVIS_ACCESS_TOKEN}")
                         .post() (err, res, body) ->
+                          # output html message using idobata hook
                           json = JSON.parse body
                           result = if json.result then success else failure
-                          message = "#{repo} build restart. result: #{result} : #{json.flash[0].notice}"
+                          message = "#{restart_repo} build restart. result: #{result} : #{json.flash[0].notice}"
                           post_data = QS.stringify source: message
                           msg.http(process.env.HUBOT_IDOBATA_HOOK_URL)
                             .query(format: "html")
@@ -76,7 +77,7 @@ module.exports = (robot) ->
                             .post(post_data) (err, res, body) ->
                               data = body
                     else
-                      msg.send "HiganBot can not find #{repo}"
+                      msg.send "HiganBot can not find #{restart_repo}"
               else
                 msg.send "HiganBot not found #{check_repo} newest commit.\n  brain stored commit: #{robot.brain.data[key]}\n  current repo commit: #{c.sha}"
             robot.brain.save()
