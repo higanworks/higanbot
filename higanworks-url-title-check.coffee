@@ -21,7 +21,7 @@ request = require 'request'
 cheerio = require 'cheerio'
  
 module.exports = (robot) ->
-  robot.hear /^(https?:\/\/.*)/i, (msg) ->
+  robot.hear /(https?:\/\/.*)$/i, (msg) ->
     url = msg.match[1]
     options =
       url: url
