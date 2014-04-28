@@ -74,3 +74,6 @@ module.exports = (robot) ->
     words = ["語尾をのばすと馬鹿に見える", "語尾をのばすと柔らかい印象あたえますよね", "伸ばすなー"]
     msg.send msg.random words
 
+  robot.hear /ごめん|すまん|すいま|すみま/i, (msg) ->
+    words = ["気にしないで！", "謝れば良いと思ってる？", "あーっと心にもない言葉！", "聞こえないなぁ？"]
+    msg.send msg.random words
