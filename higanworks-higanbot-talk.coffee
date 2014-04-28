@@ -69,3 +69,8 @@ module.exports = (robot) ->
 
   robot.hear /orz$/i, (msg) ->
     msg.send "イキロ"
+
+  robot.hear /ー$/i, (msg) ->
+    words = ["語尾をのばすと馬鹿に見える", "語尾をのばすと柔らかい印象あたえますよね", "伸ばすなー"]
+    msg.send msg.random words
+
