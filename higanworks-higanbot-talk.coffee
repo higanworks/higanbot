@@ -78,7 +78,7 @@ module.exports = (robot) ->
     words = ["気にしないで！", "謝れば良いと思ってる？", "あーっと心にもない言葉！", "聞こえないなぁ？"]
     msg.send msg.random words
 
-  robot.hear /w|ｗ|笑/i, (msg) ->
+  robot.hear /w$|ｗ$|笑/i, (msg) ->
     words = ["笑うなー", "ｗｗｗ", "面白くないよ", "ｗ"]
     msg.send msg.random words
 
