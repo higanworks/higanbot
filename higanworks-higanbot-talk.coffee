@@ -82,3 +82,7 @@ module.exports = (robot) ->
     words = ["笑うなー", "ｗｗｗ", "面白くないよ", "ｗ"]
     msg.send msg.random words
 
+  robot.hear /お願い/i, (msg) ->
+    words = ["嫌", "了解しました！", "断固断る！", "ggrks"]
+    msg.send msg.random words
+
