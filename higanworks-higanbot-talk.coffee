@@ -51,7 +51,7 @@ module.exports = (robot) ->
   robot.hear /ありがとう/i, (msg) ->
     msg.send "どういたしまして！"
 
-  robot.hear /^はい$/i, (msg) ->
+  robot.hear /^はい/i, (msg) ->
     words = ["良い返事だ", "はいだけはしっかりしてるね", "ほんとにわかってる？"]
     msg.send msg.random words
 
